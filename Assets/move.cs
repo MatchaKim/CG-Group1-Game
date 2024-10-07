@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class move : MonoBehaviour
 {
+    Rigidbody rigid;
+    private RaycastHit hit;
+    private Ray ray;
     public float speed; //움직일 속도
     float haxis;
     float vaxis;
@@ -13,7 +16,12 @@ public class move : MonoBehaviour
     private float mouseX = 0f; //좌우 회전값을 담을 변수
     private float mouseY = 0f; //위아래 회전값을 담을 변수
     Vector3 movevec;
+    public bool[] keys;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();  
+    }
     void Start()
     {
         
@@ -30,6 +38,23 @@ public class move : MonoBehaviour
         {
             mouseX += Input.GetAxis("Mouse X");
             transform.rotation = Quaternion.Euler(0, mouseX, 0);
+        }
+        ObjectHit();
+    }
+    void ObjectHit()
+    {
+        ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.gameObject.CompareTag("key") && Input.GetKeyDown(KeyCode.B))
+            {
+                key ak = hit.collider.gameObject.GetComponent<key>();
+                int aks = ak.number;
+                keys[aks] = true;
+                Destroy(hit.collider.gameObject);
+                Debug.Log("get key");
+            }
         }
     }
 }
