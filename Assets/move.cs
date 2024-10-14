@@ -40,6 +40,7 @@ public class move : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, mouseX, 0);
         }
         ObjectHit();
+        
     }
     void ObjectHit()
     {
@@ -55,6 +56,10 @@ public class move : MonoBehaviour
                 Destroy(hit.collider.gameObject);
                 Debug.Log("get key");
             }
+            else if (hit.collider.gameObject.CompareTag("door") && Input.GetKeyDown(KeyCode.U)){
+                hit.collider.gameObject.GetComponent<door>().open();
+            }
         }
     }
+   
 }
