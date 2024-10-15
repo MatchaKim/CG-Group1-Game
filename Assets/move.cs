@@ -7,14 +7,15 @@ using UnityEngine;
 public class move : MonoBehaviour
 {
     Rigidbody rigid;
+    public GameObject ui_text;
     private RaycastHit hit;
     private Ray ray;
-    public float speed; //¿òÁ÷ÀÏ ¼Óµµ
+    public float speed; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
     float haxis;
     float vaxis;
-    [SerializeField] private float mouseSpeed = 8f; //È¸Àü¼Óµµ
-    private float mouseX = 0f; //ÁÂ¿ì È¸Àü°ªÀ» ´ãÀ» º¯¼ö
-    private float mouseY = 0f; //À§¾Æ·¡ È¸Àü°ªÀ» ´ãÀ» º¯¼ö
+    [SerializeField] private float mouseSpeed = 8f; //È¸ï¿½ï¿½ï¿½Óµï¿½
+    private float mouseX = 0f; //ï¿½Â¿ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    private float mouseY = 0f; //ï¿½ï¿½ï¿½Æ·ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     Vector3 movevec;
     public bool[] keys;
     // Start is called before the first frame update
@@ -33,7 +34,7 @@ public class move : MonoBehaviour
         haxis = Input.GetAxisRaw("Horizontal");
         vaxis = Input.GetAxisRaw("Vertical");
         movevec = transform.forward*vaxis+transform.right*haxis;
-        transform.position += movevec.normalized * speed * Time.deltaTime ;//¹æÇâÅ°¿Í wasd¸¦ ÀÌ¿ëÇØ ÀÌµ¿
+        transform.position += movevec.normalized * speed * Time.deltaTime ;//ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ wasdï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
         if (Input.GetMouseButton(0))
         {
             mouseX += Input.GetAxis("Mouse X");
@@ -59,7 +60,22 @@ public class move : MonoBehaviour
             else if (hit.collider.gameObject.CompareTag("door") && Input.GetKeyDown(KeyCode.U)){
                 hit.collider.gameObject.GetComponent<door>().open();
             }
+            else if (hit.collider.gameObject.CompareTag("flashlight"))
+            {   
+                ui_text.SetActive(true);
+                if(Input.GetKeyDown(KeyCode.E))
+                {
+                    hit.collider.gameObject.GetComponent<pickupFlashlight>().OnPickup();
+                }
+            }
+            else
+            {
+                ui_text.SetActive(false);
+            }
+        }
+        else
+        {
+            ui_text.SetActive(false);
         }
     }
-   
 }
